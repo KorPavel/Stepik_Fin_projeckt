@@ -1,10 +1,12 @@
+import pytest
 from .pages.product_page import ProductPage
 
+params = [x if x != 7 else pytest.param(x, marks=pytest.mark.xfail) for x in range(10)]
 
-def test_guest_can_add_product_to_basket(browser):
+@pytest.mark.parametrize('param', params)
+def test_guest_can_add_product_to_basket(browser, param):
 
-    #link = "http://selenium1py.pythonanywhere.com/ru/catalogue/the-shellcoders-handbook_209/?promo=newYear"
-    link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019'
+    link = f'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer{param}'
 
     product_page = ProductPage(browser, link)
     product_page.open()
