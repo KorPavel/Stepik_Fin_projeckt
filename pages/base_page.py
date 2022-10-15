@@ -5,13 +5,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from .locators import BasePageLocators
 import math
+from time import time
 
 
-class BasePage():
+class BasePage:
     def __init__(self, browser, url, timeout=10):
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
+        self.email = f"{time()}@fakemail.org"
+        self.password = "Tester_QwertY"
 
     def open(self): 
         '''Метод открывает страницу '''
@@ -47,7 +50,6 @@ class BasePage():
         link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
         link.click()
 
-
     def go_to_login_page(self):
         """Переход на страницу Входа/Регистрации """
         link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
@@ -57,6 +59,11 @@ class BasePage():
         """Проверка наличия элемента """
         assert self.is_element_present(*BasePageLocators.LOGIN_LINK), \
             "Login link is not presented"
+
+    def should_be_authorized_user(self):
+        """Проверка, что пользователь зарегистрирован """
+        assert self.is_element_present(*BasePageLocators.USER_ICON), \
+            "User icon is not presented, probably unauthorised user"
 
 
     def solve_quiz_and_get_code(self):
