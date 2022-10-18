@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from .locators import BasePageLocators
 import math
 from time import time
+from faker import Faker
 
 
 class BasePage:
@@ -13,8 +14,10 @@ class BasePage:
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
-        self.email = f"{time()}@fakemail.org"
-        self.password = "Tester_QwertY"
+        self.email = Faker().email()
+        self.password = Faker().swift(11)
+        # self.email = f"{time()}@fakemail.org"
+        # self.password = "Tester_QwertY"
 
     def open(self): 
         '''Метод открывает страницу '''
