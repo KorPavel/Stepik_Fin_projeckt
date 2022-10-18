@@ -4,10 +4,13 @@ from .pages.product_page import ProductPage
 import pytest
 
 
-
 link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-cathedral-the-bazaar_190/"
 
+params = [x if x != 7 else pytest.param(x, marks=pytest.mark.xfail) for x in range(10)]
+
+
 class TestUserAddToBasketFromProductPage:
+
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
         link = "http://selenium1py.pythonanywhere.com/accounts/login/"
@@ -35,6 +38,18 @@ class TestUserAddToBasketFromProductPage:
         product_page.add_product_to_basket()
         product_page.compare_basket_and_product_name()
         product_page.compare_basket_and_product_price()
+
+
+@pytest.mark.proba
+@pytest.mark.parametrize('param', params)
+def test_guest_can_add_promo_product_to_basket(browser, param):
+    '''Тест-кейс проверяет ряд промо-кодов, среди которых есть баг, который нужно отметить xfail '''
+    link = f'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer{param}'
+    product_page = ProductPage(browser, link)
+    product_page.open()
+    product_page.add_product_to_basket()
+    product_page.compare_basket_and_product_name()
+    product_page.compare_basket_and_product_price()
 
 
 @pytest.mark.need_review
